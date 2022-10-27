@@ -1,17 +1,23 @@
 module.exports = (req, res, next) => {
   // console.log({req})
   if (Object.keys(req.responseObject).length > 0) {
-    const { code, data, extras } = req.responseObject
-
+    const {code, success,data={}, ...rest} = req.responseObject
     // let { paging } = req
     // if (paging) {
     //   paging = buildPagingInfo(paging)
     // }
-    res.status(code).send({
-      ...extras,
-      success: true,
-      data
-    })
+    if(success === true){
+      res.status(code).send({
+        data,
+        success,
+        ...rest
+      })
+    }else{
+      res.status(code).send({
+        success,
+        ...rest
+      })
+   }
     // logger.info({ res })
   }
   next()
